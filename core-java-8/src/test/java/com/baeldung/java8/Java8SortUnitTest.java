@@ -40,6 +40,79 @@ public class Java8SortUnitTest {
     }
 
     @Test
+    public final void mySortTest() {
+        final List<Human> humans = Lists.newArrayList(new Human("Brent", 25), new Human("Andrew", 26),
+                new Human("Matt", 29));
+
+        humans.sort((Human h1, Human h2) -> h1.getName().compareTo(h2.getName()));
+
+        Assert.assertThat(humans.get(0).getName(), equalTo("Andrew"));
+    }
+
+    @Test
+    public final void mySimplerSortTest() {
+        final List<Human> humans = Lists.newArrayList(new Human("Brent", 25), new Human("Andrew", 26),
+                new Human("Matt", 29));
+
+        humans.sort((h1, h2) -> h1.getName().compareTo(h2.getName()));
+
+        Assert.assertThat(humans.get(0).getName(), equalTo("Andrew"));
+    }
+
+    @Test
+    public final void mySimplerStaticSortTest() {
+        final List<Human> humans = Lists.newArrayList(new Human("Brent", 25), new Human("Andrew", 26),
+                new Human("Matt", 29));
+
+        humans.sort(Human::compareByNameThenAge);
+
+        Assert.assertThat(humans.get(0).getName(), equalTo("Andrew"));
+    }
+
+    @Test
+    public final void mySimplerExtractedComparatorSortTestByName() {
+        final List<Human> humans = Lists.newArrayList(new Human("Brent", 25), new Human("Andrew", 26),
+                new Human("Matt", 29));
+
+        Collections.sort(humans, Comparator.comparing(Human::getName));
+
+        Assert.assertThat(humans.get(0).getName(), equalTo("Andrew"));
+    }
+
+    @Test
+    public final void mySimplerExtractedComparatorSortTestByAge() {
+        final List<Human> humans = Lists.newArrayList(new Human("Brent", 25), new Human("Andrew", 26),
+                new Human("Matt", 29));
+
+        humans.sort(Comparator.comparing(Human::getAge));
+
+        Assert.assertThat(humans.get(0).getName(), equalTo("Brent"));
+    }
+
+    @Test
+    public final void mySimplerExtractedComparatorSortTestByNameThenAge() {
+        final List<Human> humans = Lists.newArrayList(new Human("Brent", 25), new Human("Andrew", 42),
+                new Human("Andrew", 26), new Human("Matt", 29));
+
+        humans.sort(Comparator.comparing(Human::getName).thenComparing(Human::getAge));
+
+        Assert.assertThat(humans.get(0), equalTo(new Human("Andrew", 26)));
+    }
+
+    @Test
+    public final void mySimplerExtractedComparatorSortTestByNameReversed() {
+        final List<Human> humans = Lists.newArrayList(new Human("Brent", 25), new Human("Andrew", 26),
+                new Human("Matt", 29));
+
+        Comparator<Human> comparator
+                = (h1, h2) -> h1.getName().compareTo(h2.getName());
+
+        humans.sort(comparator.reversed());
+
+        Assert.assertThat(humans.get(0).getName(), equalTo("Matt"));
+    }
+
+    @Test
     public final void givenLambdaShortForm_whenSortingEntitiesByName_thenCorrectlySorted() {
         final List<Human> humans = Lists.newArrayList(new Human("Sarah", 10), new Human("Jack", 12));
 
